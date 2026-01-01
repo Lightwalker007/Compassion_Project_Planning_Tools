@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evangelism Coordinator Event Planner</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Generic:wght@700&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* Custom Scrollbar for a premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+    <style>
+        @media print {
+            @page {
+                size: landscape;
+                margin: 0;
+                /* Removing margin to hide browser headers/footers */
+            }
+
+            body {
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 0.5in;
+                /* Content padding since page margin is 0 */
+            }
+
+            /* Hide UI elements */
+            /* We want to show the Header now, but hide buttons inside it */
+            #config-panel,
+            #exportBtn,
+            #saveBtn,
+            .add-session-btn,
+            .remove-session-btn,
+            .break-toggle {
+                display: none !important;
+            }
+
+            /* Header adjustments for print */
+            header {
+                position: static !important;
+                border-bottom: 2px solid #0f172a !important;
+                /* slate-900 */
+                margin-bottom: 20px !important;
+                padding-bottom: 10px !important;
+                background-color: white !important;
+                /* CRITICAL: Override dark bg */
+            }
+
+            header h1 {
+                color: #0f172a !important;
+                /* Force dark text for print if needed, or keep white if background prints */
+                line-height: 1.2;
+                display: block;
+            }
+
+            header p.text-slate-400 {
+                color: #64748b !important;
+                /* darker slate for readability */
+                display: block;
+            }
+
+            /* Layout Adjustments */
+            main {
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+
+            #contact-section {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin-bottom: 20px !important;
+            }
+
+            #contact-section h2 {
+                margin-bottom: 15px !important;
+                color: #0c4a6e !important;
+                font-size: 18px !important;
+                border-bottom: 1px solid #e2e8f0;
+                padding-bottom: 5px;
+            }
+
+            /* Force Grid Layout for Contact Info */
+            #contact-section .grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 1.5rem !important;
+            }
+
+            /* Fallback for smaller print widths if needed, but landscape should hold 3 */
+
+            #pdf-content-area {
+                width: 100% !important;
+                flex: auto !important;
+            }
+
+            /* Sidebar Roster */
+            .w-full.lg\:w-80 {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-top: 20px;
+                page-break-inside: avoid;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.5rem;
+            }
+
+            #roster-container {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                /* 3 Columns for roster to save space */
+                gap: 1rem !important;
+            }
+
+            /* Table Styling */
+            table {
+                width: 100% !important;
+                border-collapse: collapse;
+            }
+
+            th,
+            td {
+                border: 1px solid #e2e8f0;
+                page-break-inside: avoid;
+            }
+
+            /* Input styling for print - removing borders to look like text */
+            input,
+            select {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                width: 100% !important;
+                font-size: 12px !important;
+                /* Slightly smaller for print density */
+                color: #000 !important;
+            }
+
+            input::placeholder {
+                color: transparent !important;
+            }
+
+            /* Labels in Contact Section */
+            #contact-section label {
+                font-size: 10px !important;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #64748b !important;
+            }
+
+            select {
+                appearance: none;
+                -moz-appearance: none;
+                -webkit-appearance: none;
+            }
+
+            /* AM/PM Toggle Print Style */
+            .toggle-ampm {
+                border: 1px solid #ccc !important;
+                height: 1.5rem !important;
+                width: 3rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-50 text-slate-800 min-h-screen font-sans antialiased selection:bg-brand-100 selection:text-brand-900">
+
+    <!-- Navbar -->
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center h-auto md:h-20 py-4 md:py-0">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold tracking-tight uppercase text-white font-display">The
+                            Compassion Project</h1>
+                        <p class="text-slate-400 text-sm italic">Evangelism Planning Tool</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="saveBtn"
+                        class="inline-flex items-center px-4 py-2 border border-slate-700 text-sm font-medium rounded-md shadow-sm text-slate-200 bg-slate-800 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all duration-200">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                        </svg>
+                        Save Progress
+                    </button>
+                    <button id="exportBtn"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all duration-200">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Export to PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Configuration Panel -->
+        <div id="config-panel"
+            class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 transition-all duration-300">
+            <h2 class="text-lg font-display font-semibold text-slate-900 mb-4">Event Configuration</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                <div>
+                    <label for="startDate" class="block text-sm font-medium text-slate-700 mb-1">Start Date</label>
+                    <input type="date" id="startDate"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border">
+                </div>
+                <div>
+                    <label for="eventDuration" class="block text-sm font-medium text-slate-700 mb-1">Duration
+                        (Days)</label>
+                    <input type="number" id="eventDuration" min="1" max="60" value="10"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border bg-white"
+                        placeholder="e.g. 10">
+                </div>
+                <div>
+                    <button id="generateBtn"
+                        class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-md text-brand-700 bg-brand-100 hover:bg-brand-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors">
+                        Generate Schedule
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Contact Information Section -->
+        <div id="contact-section" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+            <h2 class="text-lg font-display font-semibold text-slate-900 mb-4">Event Contact Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Name of Church -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Name of Church</label>
+                    <input type="text"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border"
+                        placeholder="e.g. Grace Community Church">
+                </div>
+                <!-- Name of Pastor -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Name of Pastor</label>
+                    <input type="text"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border"
+                        placeholder="e.g. Pastor John Doe">
+                </div>
+                <!-- Church Address -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Church Address</label>
+                    <input type="text"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border"
+                        placeholder="123 Main St, City, State">
+                </div>
+                <!-- Church Contact Number -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Church Contact Number</label>
+                    <input type="tel"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border"
+                        placeholder="(555) 123-4567">
+                </div>
+                <!-- Evangelism Coordinator -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Evangelism Coordinator</label>
+                    <input type="text"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border"
+                        placeholder="Coordinator Name">
+                </div>
+                <!-- Digital Ops Number -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Digital Ops Number</label>
+                    <select
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border bg-white">
+                        <option value="">Select Number...</option>
+                        <option value="(770) 404-7018">(770) 404-7018</option>
+                        <option value="(843) 954-3683">(843) 954-3683</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Main Content: Schedule -->
+            <div class="flex-1 min-w-0" id="pdf-content-area">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+                        <h3 class="text-lg font-display font-medium text-slate-900">Event Schedule</h3>
+                        <span id="schedule-daterange" class="text-sm text-slate-500 hidden">Oct 12 - Oct 22</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider w-32">
+                                        Date</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-24">
+                                        Break</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider w-64">
+                                        Giveaway</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-24">
+                                        Timing</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        Menu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-body" class="bg-white divide-y divide-slate-200">
+                                <!-- Rows will be generated here -->
+                                <tr class="text-center py-8">
+                                    <td colspan="5" class="px-6 py-12 text-slate-400 italic">
+                                        Select a start date and duration to generate the schedule.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar: Volunteer Roster -->
+            <div class="w-full lg:w-80 flex-shrink-0">
+                <!-- distinct from pdf content for now, might need to include in export later -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 sticky top-24">
+                    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                        <h3 class="text-lg font-display font-medium text-slate-900">Volunteer Roster</h3>
+                        <p class="text-xs text-slate-500 mt-1">Assign key roles for the event.</p>
+                    </div>
+                    <div class="p-4 space-y-4" id="roster-container">
+                        <!-- Roster slots will be generated here -->
+                        <div class="roster-slot text-sm text-slate-500 italic text-center py-4">
+                            Roster will load...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PDF Export Hidden Container (if needed to combine layouts) -->
+    <div id="hidden-print-container" class="hidden"></div>
+
+    <script>
+        // --- Configuration & State ---
+        const GIVEAWAY_OPTIONS = [
+            "Diapers",
+            "Kids Sneakers",
+            "Laundry Supplies",
+            "Grocery Supplies",
+            "Gas Cards",
+            "Clothes",
+            "Children's Toys",
+            "Bill Raffle Assistance"
+        ];
+
+        const ROLES = [
+            "Greeting Team Leader",
+            "Registration Team Leader",
+            "Hospitality Team Leader",
+            "Usher Team Leader",
+            "Children's Team Leader",
+            "Media Team Leader",
+            "Deacon Team Leader",
+            "Baptism Team Leader",
+            "Compassion Team Leader",
+            "Retention Team Leader"
+        ];
+
+        // --- DOM Elements ---
+        const startDateInput = document.getElementById('startDate');
+        const durationInput = document.getElementById('eventDuration');
+        const generateBtn = document.getElementById('generateBtn');
+        const scheduleBody = document.getElementById('schedule-body');
+        const rosterContainer = document.getElementById('roster-container');
+        const exportBtn = document.getElementById('exportBtn');
+        const saveBtn = document.getElementById('saveBtn');
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Datalist Check
+            if (!document.getElementById('giveaway-list')) {
+                const datalist = document.createElement('datalist');
+                datalist.id = 'giveaway-list';
+                GIVEAWAY_OPTIONS.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    datalist.appendChild(option);
+                });
+                document.body.appendChild(datalist);
+            }
+
+            // 2. Roster Check (Don't overwrite if rehydrating)
+            // If the roster has no inputs, it needs rendering.
+            if (rosterContainer.querySelectorAll('input').length === 0) {
+                renderRoster();
+            }
+
+            // 3. Date Check
+            if (!startDateInput.value) {
+                startDateInput.valueAsDate = new Date();
+            }
+
+            // 4. Rehydrate Events (Restore listeners to saved HTML)
+            rehydrateSchedule();
+        });
+
+        // --- Rehydration Logic ---
+        function rehydrateSchedule() {
+            const rows = scheduleBody.querySelectorAll('tr');
+            rows.forEach(tr => {
+                if (tr.querySelector('td[colspan]')) return;
+                const optionsHtml = GIVEAWAY_OPTIONS.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+                setupRowLogic(tr, optionsHtml);
+            });
+        }
+
+        // --- Roster Logic ---
+        function renderRoster() {
+            rosterContainer.innerHTML = '';
+            ROLES.forEach((role, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col space-y-1";
+                div.innerHTML = `
+                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">${role}</label>
+                    <input type="text" placeholder="Volunteer Name" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm py-2 px-3 border bg-slate-50 focus:bg-white transition-colors">
+                `;
+                rosterContainer.appendChild(div);
+            });
+        }
+
+        // --- Generator Logic ---
+        generateBtn.addEventListener('click', () => {
+            const start = new Date(startDateInput.value);
+            let days = parseInt(durationInput.value);
+            if (!days || days < 1) {
+                days = 10;
+                durationInput.value = 10;
+            }
+
+            if (isNaN(start.getTime())) {
+                alert("Please select a valid start date.");
+                return;
+            }
+
+            renderSchedule(start, days);
+        });
+
+        function renderSchedule(startDate, days) {
+            scheduleBody.innerHTML = '';
+
+            for (let i = 0; i < days; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
+                const dateString = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors group";
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-normal align-top cell-date w-32">
+                        <div class="text-sm font-semibold text-slate-900">${dayName}</div>
+                        <div class="text-sm text-slate-500">${dateString}</div>
+                        <button class="mt-2 text-xs text-brand-600 hover:text-brand-800 font-medium focus:outline-none flex items-center add-session-btn opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Two events Same Day? 
+                            <br>
+                            Click to add
+                        </button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center align-top cell-break">
+                        <input type="checkbox" class="break-toggle h-5 w-5 text-brand-600 focus:ring-brand-500 border-gray-300 rounded cursor-pointer transition-all">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap align-top">
+                        <input type="text" class="row-input input-giveaway block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" list="giveaway-list" placeholder="Select or type item...">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center align-top">
+                        ${getAmPmToggleHtml(false)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap align-top">
+                        <input type="text" class="row-input block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" placeholder="e.g. Vegan Chili">
+                    </td>
+                `;
+
+                scheduleBody.appendChild(tr);
+                setupRowLogic(tr);
+            }
+        }
+
+        // --- Helper Functions ---
+
+        function getAmPmToggleHtml(isAm) {
+            return `
+                <div class="flex flex-col items-center">
+                    <button class="toggle-ampm row-input relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 ${isAm ? 'bg-brand-500' : 'bg-slate-200'}" role="switch" aria-checked="${isAm}">
+                        <span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${isAm ? 'translate-x-5' : 'translate-x-0'}"></span>
+                    </button>
+                    <span class="text-xs text-slate-500 block mt-1 ampm-label ${isAm ? 'text-brand-600 font-bold' : ''}">${isAm ? 'AM' : 'PM'}</span>
+                </div>
+            `;
+        }
+
+        function setupCellLogic(row) {
+            const ampmBtn = row.querySelector('.toggle-ampm');
+            if (ampmBtn) {
+                // Remove interactions if needed to prevent duplicates? 
+                // cloneNode during save might not preserve listeners, but innerHTML/outerHTML definitetly wipes them.
+                // So adding them fresh is correct.
+                ampmBtn.addEventListener('click', () => {
+                    if (ampmBtn.classList.contains('cursor-not-allowed')) return;
+
+                    const isCurrentlyAm = ampmBtn.classList.contains('bg-brand-500');
+                    const isNowAm = !isCurrentlyAm;
+                    const span = ampmBtn.querySelector('span[aria-hidden="true"]');
+                    const label = row.querySelector('.ampm-label');
+
+                    if (isNowAm) {
+                        ampmBtn.classList.remove('bg-slate-200');
+                        ampmBtn.classList.add('bg-brand-500');
+                        span.classList.remove('translate-x-0');
+                        span.classList.add('translate-x-5');
+                        label.textContent = "AM";
+                        label.classList.add('text-brand-600', 'font-bold');
+                    } else {
+                        ampmBtn.classList.add('bg-slate-200');
+                        ampmBtn.classList.remove('bg-brand-500');
+                        span.classList.add('translate-x-0');
+                        span.classList.remove('translate-x-5');
+                        label.textContent = "PM";
+                        label.classList.remove('text-brand-600', 'font-bold');
+                    }
+                });
+            }
+        }
+
+        function setupRowLogic(tr) {
+            const breakCheckbox = tr.querySelector('.break-toggle');
+            const addSessionBtn = tr.querySelector('.add-session-btn');
+            const removeSessionBtn = tr.querySelector('.remove-session-btn');
+
+            // Break Toggle
+            if (breakCheckbox) {
+                breakCheckbox.addEventListener('change', (e) => {
+                    const isBreak = e.target.checked;
+                    // If break is on, hide the "Add Event" button
+                    if (addSessionBtn) addSessionBtn.style.display = isBreak ? 'none' : (tr.classList.contains('has-sub-session') ? 'none' : 'flex');
+
+                    toggleBreakRow(tr, isBreak);
+                });
+            }
+
+            // Remove Session Button (For rehydrated sub-rows)
+            if (removeSessionBtn) {
+                removeSessionBtn.addEventListener('click', () => {
+                    const subTr = tr;
+                    const parentTr = subTr.previousElementSibling;
+                    subTr.remove();
+                    if (parentTr) {
+                        parentTr.classList.remove('has-sub-session');
+                        const breakCell = parentTr.querySelector('.cell-break');
+                        if (breakCell) breakCell.rowSpan = 1;
+                        const parentAddBtn = parentTr.querySelector('.add-session-btn');
+                        if (parentAddBtn) parentAddBtn.style.display = 'flex';
+                    }
+                });
+            }
+
+            // Add Session Button
+            if (addSessionBtn) {
+                addSessionBtn.addEventListener('click', () => {
+                    if (tr.classList.contains('has-sub-session')) return;
+
+                    // Create Sub Row
+                    const subTr = document.createElement('tr');
+                    subTr.className = "hover:bg-slate-50 transition-colors sub-session-row";
+
+                    const breakCell = tr.querySelector('.cell-break');
+                    if (breakCell) breakCell.rowSpan = 2;
+
+                    tr.classList.add('has-sub-session');
+                    addSessionBtn.style.display = 'none';
+
+                    subTr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap align-top text-right">
+                             <button class="text-xs text-red-500 hover:text-red-700 font-medium focus:outline-none flex items-center justify-end w-full remove-session-btn transition-colors mt-2">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                Remove
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap align-top">
+                            <input type="text" class="row-input input-giveaway block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" list="giveaway-list" placeholder="Select or type item...">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center align-top">
+                            ${getAmPmToggleHtml(true)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap align-top">
+                            <input type="text" class="row-input block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" placeholder="e.g. Continental Breakfast">
+                        </td>
+                   `;
+
+                    tr.after(subTr);
+                    setupCellLogic(subTr);
+
+                    // Remove Logic (Closure access is simplest for new rows)
+                    const removeBtn = subTr.querySelector('.remove-session-btn');
+                    removeBtn.addEventListener('click', () => {
+                        subTr.remove();
+                        tr.classList.remove('has-sub-session');
+                        if (breakCell) breakCell.rowSpan = 1;
+                        addSessionBtn.style.display = 'flex';
+                    });
+                });
+            }
+
+            setupCellLogic(tr);
+        }
+
+        function toggleBreakRow(tr, isBreak) {
+            // Logic to disable inputs in this TR AND the next TR if it's a sub-session
+            const rows = [tr];
+            // Check if next row is sub-session
+            if (tr.classList.contains('has-sub-session') && tr.nextElementSibling && tr.nextElementSibling.classList.contains('sub-session-row')) {
+                rows.push(tr.nextElementSibling);
+            }
+
+            rows.forEach(row => {
+                const inputs = row.querySelectorAll('.row-input');
+                if (isBreak) {
+                    row.classList.add('bg-slate-100', 'opacity-75');
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        if (input.classList.contains('toggle-ampm')) {
+                            input.classList.add('opacity-50', 'cursor-not-allowed');
+                        } else {
+                            input.classList.add('bg-slate-200', 'text-slate-400');
+                        }
+                    });
+                } else {
+                    row.classList.remove('bg-slate-100', 'opacity-75');
+                    inputs.forEach(input => {
+                        input.disabled = false;
+                        if (input.classList.contains('toggle-ampm')) {
+                            input.classList.remove('opacity-50', 'cursor-not-allowed');
+                        } else {
+                            input.classList.remove('bg-slate-200', 'text-slate-400');
+                        }
+                    });
+                }
+            });
+        }
+
+        // --- Export Logic (Native Print) ---
+        exportBtn.addEventListener('click', () => {
+            // Update page title to set default filename for PDF
+            const churchNameInput = document.querySelector('input[placeholder="e.g. Grace Community Church"]');
+            const startDateInput = document.getElementById('startDate');
+            const originalTitle = document.title;
+
+            let filenamePrefix = "";
+
+            // Format Date as YYMMDD from YYYY-MM-DD
+            if (startDateInput && startDateInput.value) {
+                const parts = startDateInput.value.split('-'); // [YYYY, MM, DD]
+                if (parts.length === 3) {
+                    // Take last 2 digits of year, plus month and day
+                    const yy = parts[0].substring(2);
+                    const mm = parts[1];
+                    const dd = parts[2];
+                    filenamePrefix = `${yy}${mm}${dd} `;
+                }
+            }
+
+            let churchName = "Evangelism Plan";
+            if (churchNameInput && churchNameInput.value.trim() !== "") {
+                churchName = `${churchNameInput.value} Evangelism Plan`;
+            }
+
+            document.title = filenamePrefix + churchName;
+
+            // Native print allows 'Save as PDF' which is higher quality and more reliable
+            window.print();
+
+            // Restore original title after a slight delay to ensure print dialog picked it up
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 500);
+        });
+
+        // --- Save Progress Logic ---
+        saveBtn.addEventListener('click', () => {
+            // 1. Sync state to attributes
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (input.checked) {
+                        input.setAttribute('checked', 'checked');
+                    } else {
+                        input.removeAttribute('checked');
+                    }
+                } else if (input.tagName === 'SELECT') {
+                    // For select, we need to explicitly set the 'selected' attribute on the correct option
+                    const options = input.querySelectorAll('option');
+                    options.forEach(opt => {
+                        if (opt.value === input.value) {
+                            opt.setAttribute('selected', 'selected');
+                        } else {
+                            opt.removeAttribute('selected');
+                        }
+                    });
+                    // Also set value attribute for safety
+                    input.setAttribute('value', input.value);
+                } else if (input.tagName === 'TEXTAREA') {
+                    input.textContent = input.value;
+                } else {
+                    input.setAttribute('value', input.value);
+                }
+            });
+
+            // 2. Serialize using outerHTML (preserves script characters better than XMLSerializer)
+            let htmlContent = document.documentElement.outerHTML;
+
+            // 3. Add Doctype
+            htmlContent = '<!DOCTYPE html>\n' + htmlContent;
+
+            // 4. Create filename
+            const churchNameInput = document.querySelector('input[placeholder="e.g. Grace Community Church"]');
+            const churchName = churchNameInput && churchNameInput.value ? churchNameInput.value.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'planning_tool';
+            const dateStr = new Date().toISOString().split('T')[0];
+            const filename = `${churchName}_${dateStr}.html`;
+
+            // 5. Download
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+        // --- Roster Logic ---
+        function renderRoster() {
+            rosterContainer.innerHTML = '';
+            ROLES.forEach((role, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col space-y-1";
+                div.innerHTML = `
+                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">${role}</label>
+                    <input type="text" placeholder="Volunteer Name" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm py-2 px-3 border bg-slate-50 focus:bg-white transition-colors">
+                `;
+                rosterContainer.appendChild(div);
+            });
+        }
+
+        // --- Generator Logic ---
+        generateBtn.addEventListener('click', () => {
+            const start = new Date(startDateInput.value);
+            // Default to 10 if invalid input
+            let days = parseInt(durationInput.value);
+            if (!days || days < 1) {
+                days = 10;
+                durationInput.value = 10;
+            }
+
+            if (isNaN(start.getTime())) {
+                alert("Please select a valid start date.");
+                return;
+            }
+
+            renderSchedule(start, days);
+        });
+
+        function renderSchedule(startDate, days) {
+            scheduleBody.innerHTML = '';
+
+            for (let i = 0; i < days; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
+                const dateString = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors group";
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-normal align-top cell-date w-32">
+                        <div class="text-sm font-semibold text-slate-900">${dayName}</div>
+                        <div class="text-sm text-slate-500">${dateString}</div>
+                        <button class="mt-2 text-xs text-brand-600 hover:text-brand-800 font-medium focus:outline-none flex items-center add-session-btn opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Two Events Same Day? 
+                            <br>
+                            Click to add
+                        </button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center align-top cell-break">
+                        <input type="checkbox" class="break-toggle h-5 w-5 text-brand-600 focus:ring-brand-500 border-gray-300 rounded cursor-pointer transition-all">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap align-top">
+                        <input type="text" class="row-input input-giveaway block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" list="giveaway-list" placeholder="Select or type item...">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center align-top">
+                        ${getAmPmToggleHtml(false)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap align-top">
+                        <input type="text" class="row-input block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" placeholder="e.g. Vegan Chili">
+                    </td>
+                `;
+
+                scheduleBody.appendChild(tr);
+                setupRowLogic(tr);
+            }
+        }
+
+        // --- Helper Functions ---
+
+        function getAmPmToggleHtml(isAm) {
+            return `
+                <div class="flex flex-col items-center">
+                    <button class="toggle-ampm row-input relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 ${isAm ? 'bg-brand-500' : 'bg-slate-200'}" role="switch" aria-checked="${isAm}">
+                        <span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${isAm ? 'translate-x-5' : 'translate-x-0'}"></span>
+                    </button>
+                    <span class="text-xs text-slate-500 block mt-1 ampm-label ${isAm ? 'text-brand-600 font-bold' : ''}">${isAm ? 'AM' : 'PM'}</span>
+                </div>
+            `;
+        }
+
+        function setupCellLogic(row) {
+            const ampmBtn = row.querySelector('.toggle-ampm');
+            if (ampmBtn) {
+                ampmBtn.addEventListener('click', () => {
+                    if (ampmBtn.classList.contains('cursor-not-allowed')) return;
+
+                    const isCurrentlyAm = ampmBtn.classList.contains('bg-brand-500');
+                    const isNowAm = !isCurrentlyAm;
+                    const span = ampmBtn.querySelector('span[aria-hidden="true"]');
+                    const label = row.querySelector('.ampm-label');
+
+                    if (isNowAm) {
+                        ampmBtn.classList.remove('bg-slate-200');
+                        ampmBtn.classList.add('bg-brand-500');
+                        span.classList.remove('translate-x-0');
+                        span.classList.add('translate-x-5');
+                        label.textContent = "AM";
+                        label.classList.add('text-brand-600', 'font-bold');
+                    } else {
+                        ampmBtn.classList.add('bg-slate-200');
+                        ampmBtn.classList.remove('bg-brand-500');
+                        span.classList.add('translate-x-0');
+                        span.classList.remove('translate-x-5');
+                        label.textContent = "PM";
+                        label.classList.remove('text-brand-600', 'font-bold');
+                    }
+                });
+            }
+        }
+
+        function setupRowLogic(tr) {
+            const breakCheckbox = tr.querySelector('.break-toggle');
+            const addSessionBtn = tr.querySelector('.add-session-btn');
+
+            // Break Toggle
+            breakCheckbox.addEventListener('change', (e) => {
+                const isBreak = e.target.checked;
+                // If break is on, hide the "Add Event" button
+                if (addSessionBtn) addSessionBtn.style.display = isBreak ? 'none' : (tr.classList.contains('has-sub-session') ? 'none' : 'flex');
+
+                toggleBreakRow(tr, isBreak);
+            });
+
+            // Add Session Button
+            if (addSessionBtn) {
+                addSessionBtn.addEventListener('click', () => {
+                    if (tr.classList.contains('has-sub-session')) return;
+
+                    // Create Sub Row
+                    const subTr = document.createElement('tr');
+                    subTr.className = "hover:bg-slate-50 transition-colors sub-session-row";
+
+                    const breakCell = tr.querySelector('.cell-break');
+                    breakCell.rowSpan = 2;
+
+                    tr.classList.add('has-sub-session');
+                    addSessionBtn.style.display = 'none';
+
+                    subTr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap align-top text-right">
+                             <button class="text-xs text-red-500 hover:text-red-700 font-medium focus:outline-none flex items-center justify-end w-full remove-session-btn transition-colors mt-2">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                Remove
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap align-top">
+                            <input type="text" class="row-input input-giveaway block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" list="giveaway-list" placeholder="Select or type item...">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center align-top">
+                            ${getAmPmToggleHtml(true)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap align-top">
+                            <input type="text" class="row-input block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm py-1.5 px-3 border" placeholder="e.g. Continental Breakfast">
+                        </td>
+                   `;
+
+                    tr.after(subTr);
+                    setupCellLogic(subTr);
+
+                    // Remove Logic
+                    const removeBtn = subTr.querySelector('.remove-session-btn');
+                    removeBtn.addEventListener('click', () => {
+                        subTr.remove();
+                        tr.classList.remove('has-sub-session');
+                        breakCell.rowSpan = 1;
+                        addSessionBtn.style.display = 'flex';
+                    });
+                });
+            }
+
+            setupCellLogic(tr);
+        }
+
+        function toggleBreakRow(tr, isBreak) {
+            // Logic to disable inputs in this TR AND the next TR if it's a sub-session
+            const rows = [tr];
+            // Check if next row is sub-session
+            if (tr.classList.contains('has-sub-session') && tr.nextElementSibling && tr.nextElementSibling.classList.contains('sub-session-row')) {
+                rows.push(tr.nextElementSibling);
+            }
+
+            rows.forEach(row => {
+                const inputs = row.querySelectorAll('.row-input');
+                if (isBreak) {
+                    row.classList.add('bg-slate-100', 'opacity-75');
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        if (input.classList.contains('toggle-ampm')) {
+                            input.classList.add('opacity-50', 'cursor-not-allowed');
+                        } else {
+                            input.classList.add('bg-slate-200', 'text-slate-400');
+                        }
+                    });
+                } else {
+                    row.classList.remove('bg-slate-100', 'opacity-75');
+                    inputs.forEach(input => {
+                        input.disabled = false;
+                        if (input.classList.contains('toggle-ampm')) {
+                            input.classList.remove('opacity-50', 'cursor-not-allowed');
+                        } else {
+                            input.classList.remove('bg-slate-200', 'text-slate-400');
+                        }
+                    });
+                }
+            });
+        }
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evangelism Meeting Outline Guide</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Generic:wght@700&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar for a premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Print Styles */
+        @media print {
+            @page {
+                size: landscape;
+                margin: 0;
+                /* Removing margin to hide browser headers/footers */
+            }
+
+            body {
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 0.5in;
+                /* Content padding since page margin is 0 */
+            }
+
+            /* Hide UI elements */
+            #config-panel,
+            #exportBtn,
+            #saveBtn {
+                display: none !important;
+            }
+
+            /* Header adjustments for print */
+            header {
+                position: static !important;
+                border-bottom: 2px solid #0f172a !important;
+                /* slate-900 */
+                margin-bottom: 20px !important;
+                padding-bottom: 10px !important;
+                background-color: white !important;
+                /* CRITICAL: Override dark bg */
+            }
+
+            header h1 {
+                color: #0f172a !important;
+                line-height: 1.2;
+                display: block;
+            }
+
+            header p.text-slate-400 {
+                color: #64748b !important;
+                display: block;
+            }
+
+            /* Ensure textareas print fully */
+            textarea {
+                border: 1px solid #e2e8f0 !important;
+                resize: none;
+                overflow: hidden;
+                white-space: pre-wrap;
+                /* Preserve line breaks */
+            }
+
+            /* Matrix Table Styling for Print */
+            table {
+                width: 100% !important;
+                border-collapse: collapse;
+                page-break-inside: avoid;
+            }
+
+            th,
+            td {
+                border: 1px solid #cbd5e1 !important;
+                /* darker border for matrix */
+                page-break-inside: avoid;
+            }
+
+            /* Checkbox Styling */
+            input[type="checkbox"] {
+                appearance: none;
+                -webkit-appearance: none;
+                width: 1rem;
+                height: 1rem;
+                border: 1px solid #64748b;
+                display: inline-block;
+                position: relative;
+            }
+
+            input[type="checkbox"]:checked {
+                background-color: #0f172a;
+                border-color: #0f172a;
+            }
+
+            input[type="checkbox"]:checked::after {
+                content: '✓';
+                color: white;
+                position: absolute;
+                top: -2px;
+                left: 1px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-50 text-slate-800 min-h-screen font-sans antialiased selection:bg-brand-100 selection:text-brand-900">
+
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center h-auto md:h-20 py-4 md:py-0">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold tracking-tight uppercase text-white font-display">The
+                            Compassion Project</h1>
+                        <p class="text-slate-400 text-sm italic">Evangelism Meeting Outline Guide</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="saveBtn"
+                        class="inline-flex items-center px-4 py-2 border border-slate-700 text-sm font-medium rounded-md shadow-sm text-slate-200 bg-slate-800 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all duration-200">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                        </svg>
+                        Save Progress
+                    </button>
+                    <button id="exportBtn"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all duration-200">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Export to PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Configuration Panel -->
+        <div id="config-panel"
+            class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 transition-all duration-300">
+            <h2 class="text-lg font-display font-semibold text-slate-900 mb-4">Event Configuration</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                <!-- Name of Church (Used for Filename) -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Name of Church</label>
+                    <input type="text" id="churchName"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border"
+                        placeholder="e.g. Grace Community Church">
+                </div>
+                <div>
+                    <label for="startDate" class="block text-sm font-medium text-slate-700 mb-1">Start Date</label>
+                    <input type="date" id="startDate"
+                        class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border">
+                </div>
+                <div>
+                    <label for="eventDuration" class="block text-sm font-medium text-slate-700 mb-1">Duration
+                        (Days)</label>
+                    <div class="flex space-x-2">
+                        <input type="number" id="eventDuration" min="1" max="60" value="10"
+                            class="block w-full rounded-md border-slate-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm p-2.5 border bg-white"
+                            placeholder="e.g. 10">
+                        <button id="generateBtn"
+                            class="inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-md text-brand-700 bg-brand-100 hover:bg-brand-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors">
+                            Build Matrix
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meeting 1: The Foundation & Infrastructure -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                <h3 class="text-lg font-display font-semibold text-slate-900">Meeting 1: The Foundation & Infrastructure
+                </h3>
+                <p class="text-sm text-slate-500 mt-1">Goal: Confirm event constraints and assign leadership roles.</p>
+            </div>
+            <div class="p-6">
+                <!-- Actions -->
+                <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Key Actions & Decisions</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <label
+                        class="flex items-start space-x-3 p-3 rounded hover:bg-slate-50 transition-colors md:col-span-2 bg-brand-50 border border-brand-100">
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500 mt-0.5">
+                        <span class="text-brand-900 font-bold">Confirm All Team Leaders And Fill Out The Planning
+                            Template</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 rounded hover:bg-slate-50 transition-colors">
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500 mt-0.5">
+                        <span class="text-slate-700 text-sm">Confirm Event Dates & Duration</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 rounded hover:bg-slate-50 transition-colors">
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500 mt-0.5">
+                        <span class="text-slate-700 text-sm">Identify Break Days/Split Days</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 rounded hover:bg-slate-50 transition-colors">
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500 mt-0.5">
+                        <span class="text-slate-700 text-sm">Finalize Menu per Day</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 rounded hover:bg-slate-50 transition-colors">
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500 mt-0.5">
+                        <span class="text-slate-700 text-sm">Finalize Giveaways per Day</span>
+                    </label>
+                </div>
+
+                <!-- Homework -->
+                <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Homework</h4>
+                <div class="space-y-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                        <div class="flex items-start space-x-3">
+                            <input type="checkbox"
+                                class="h-5 w-5 text-brand-600 rounded border-slate-300 focus:ring-brand-500 mt-0.5">
+                            <span class="text-slate-700 text-sm">Receive and read the <strong>Compassion Project One
+                                    Guide</strong>.</span>
+                        </div>
+                    </div>
+                    <div class="bg-brand-50 border border-brand-100 rounded-lg p-4">
+                        <p class="text-brand-800 text-sm font-medium mb-2">Volunteer Recruitment Goal:</p>
+                        <div class="flex items-start space-x-3">
+                            <input type="checkbox"
+                                class="h-5 w-5 text-brand-600 rounded border-brand-300 focus:ring-brand-500 mt-0.5">
+                            <span class="text-brand-900 text-sm">Each Team Leader must recruit a <strong>minimum of 2
+                                    volunteers</strong> per section before Meeting 2.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meeting 2: The Capacity Grid -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                <h3 class="text-lg font-display font-semibold text-slate-900">Meeting 2: The Capacity Grid</h3>
+                <p class="text-sm text-slate-500 mt-1">Goal: Build the Volunteer Coverage Matrix. Columns = Dates, Rows
+                    = Teams.</p>
+            </div>
+            <div class="p-6">
+                <!-- Handouts -->
+                <div class="flex items-center space-x-6 mb-6">
+                    <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Distribute Handouts:</span>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox"
+                            class="h-4 w-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-sm text-slate-700">Purchase Sheet</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox"
+                            class="h-4 w-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-sm text-slate-700">Miscellaneous Budget</span>
+                    </label>
+                </div>
+
+                <!-- DYNAMIC MATRIX -->
+                <div class="overflow-x-auto border rounded-lg border-slate-200" id="matrix-container">
+                    <table class="min-w-full divide-y divide-slate-200 text-sm">
+                        <!-- Generated by JS -->
+                        <tbody class="bg-white">
+                            <tr>
+                                <td class="p-8 text-center text-slate-500 italic">
+                                    Enter Start Date & Duration above and click "Build Matrix"
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meeting 3: The Talk-Through -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                <h3 class="text-lg font-display font-semibold text-slate-900">Meeting 3: The Talk-Through (Mental
+                    Rehearsal)</h3>
+                <p class="text-sm text-slate-500 mt-1">Goal: Walk through the entire event flow. Ensure "High Warmth".
+                </p>
+            </div>
+            <div class="p-6">
+                <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Event Sequence Rehearsal</h4>
+                <div class="space-y-3">
+                    <!-- Sequence Items -->
+                    <label
+                        class="flex items-center space-x-3 p-2 rounded hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                        <span
+                            class="h-6 w-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">1</span>
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-700 text-sm font-medium">Volunteer Arrival & Review Expectations</span>
+                    </label>
+                    <label
+                        class="flex items-center space-x-3 p-2 rounded hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                        <span
+                            class="h-6 w-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">2</span>
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-700 text-sm font-medium">Doors Open (Hospitality/Greeters
+                            functionality)</span>
+                    </label>
+                    <label
+                        class="flex items-center space-x-3 p-2 rounded hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                        <span
+                            class="h-6 w-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">3</span>
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-700 text-sm font-medium">Event Start & Prayer</span>
+                    </label>
+                    <label
+                        class="flex items-center space-x-3 p-2 rounded hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                        <span
+                            class="h-6 w-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">4</span>
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-700 text-sm font-medium">Welcome & Sermon</span>
+                    </label>
+                    <label
+                        class="flex items-center space-x-3 p-2 rounded hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                        <span
+                            class="h-6 w-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">5</span>
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-700 text-sm font-medium">Appeal & Baptism (Logistics Check)</span>
+                    </label>
+                    <label
+                        class="flex items-center space-x-3 p-2 rounded hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                        <span
+                            class="h-6 w-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">6</span>
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-700 text-sm font-medium">Dismissal & Gift Distribution</span>
+                    </label>
+                    <label
+                        class="flex items-center space-x-3 p-2 rounded hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                        <span
+                            class="h-6 w-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">7</span>
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-700 text-sm font-medium">Trash Sweep & Reset</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meeting 4: The Back-Brief & Marketing -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                <h3 class="text-lg font-display font-semibold text-slate-900">Meeting 4: The Back-Brief & Marketing</h3>
+                <p class="text-sm text-slate-500 mt-1">Goal: Team leads brief the Pastor/Coordinator. Final adjustments.
+                </p>
+            </div>
+            <div class="p-6">
+                <!-- Marketing Checklist -->
+                <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Marketing & Digital</h4>
+                <div class="space-y-2 mb-6">
+                    <label class="flex items-start space-x-3">
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500 mt-0.5">
+                        <span class="text-slate-700 text-sm">Review/Show Ad Flyer Templates</span>
+                    </label>
+                    <label class="flex items-start space-x-3">
+                        <input type="checkbox"
+                            class="h-5 w-5 text-brand-600 rounded border-gray-300 focus:ring-brand-500 mt-0.5">
+                        <span class="text-slate-700 text-sm">Share "How-To-Guide" Video Link with Media Team</span>
+                    </label>
+                </div>
+
+                <!-- Notes -->
+                <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Back-Brief Adjustments & Notes
+                </h4>
+                <textarea
+                    class="w-full border-slate-300 rounded-md shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm p-3 border"
+                    rows="4" placeholder="Record team feedback and final tweaks here..."></textarea>
+            </div>
+        </div>
+
+        <!-- Meeting 5: Final Confirmation -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                <h3 class="text-lg font-display font-semibold text-slate-900">Meeting 5: The Final Confirmation</h3>
+                <p class="text-sm text-slate-500 mt-1">Goal: Verify all previous plans. Go/No-Go.</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex items-center space-x-3 p-4 bg-slate-50 rounded border border-slate-200">
+                        <input type="checkbox"
+                            class="h-6 w-6 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-800 font-semibold">Verify Schedule (Meeting 1)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-4 bg-slate-50 rounded border border-slate-200">
+                        <input type="checkbox"
+                            class="h-6 w-6 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-800 font-semibold">Verify Volunteers (Meeting 2)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-4 bg-slate-50 rounded border border-slate-200">
+                        <input type="checkbox"
+                            class="h-6 w-6 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-800 font-semibold">Verify Misc. Items Acquired</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-4 bg-slate-50 rounded border border-slate-200">
+                        <input type="checkbox"
+                            class="h-6 w-6 text-brand-600 rounded border-gray-300 focus:ring-brand-500">
+                        <span class="text-slate-800 font-semibold">Final Prayer & Transition</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Constants
+        const TEAMS = [
+            "Greeting Team",
+            "Registration Team",
+            "Hospitality Team",
+            "Usher Team",
+            "Children's Team",
+            "Media Team",
+            "Deacon Team",
+            "Baptism Team",
+            "Compassion Team",
+            "Retention Team"
+        ];
+
+        // Elements
+        const startDateInput = document.getElementById('startDate');
+        const durationInput = document.getElementById('eventDuration');
+        const generateBtn = document.getElementById('generateBtn');
+        const matrixContainer = document.getElementById('matrix-container');
+        const saveBtn = document.getElementById('saveBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const churchNameInput = document.getElementById('churchName');
+
+        // --- Generator Logic (Meeting 2 Matrix) ---
+        generateBtn.addEventListener('click', () => {
+            const start = new Date(startDateInput.value);
+            const days = parseInt(durationInput.value);
+
+            if (isNaN(start.getTime()) || !days || days < 1) {
+                alert("Please enter a valid Start Date and Duration.");
+                return;
+            }
+
+            renderMatrix(start, days);
+        });
+
+        function renderMatrix(startDate, days) {
+            let html = `<table class="min-w-full divide-y divide-slate-200 text-sm border-collapse">`;
+
+            // HEADERS (Dates)
+            html += `<thead class="bg-gray-50"><tr>`;
+            html += `<th class="px-3 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10 border-b border-r border-slate-200">Team / Date</th>`;
+
+            for (let i = 0; i < days; i++) {
+                const d = new Date(startDate);
+                d.setDate(startDate.getDate() + i);
+                const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+                const dateStr = d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
+
+                html += `<th class="px-2 py-3 text-center text-xs font-semibold text-slate-600 border-b border-slate-200 min-w-[60px]">
+                            <div>${dayName}</div>
+                            <div class="text-xs text-slate-400 font-normal">${dateStr}</div>
+                        </th>`;
+            }
+            html += `</tr></thead>`;
+
+            // BODY (Teams)
+            html += `<tbody class="bg-white divide-y divide-slate-200">`;
+
+            TEAMS.forEach((team) => {
+                html += `<tr class="hover:bg-slate-50 transition-colors">`;
+                // Team Name Header Cell
+                html += `<td class="px-3 py-2 text-sm font-medium text-slate-900 sticky left-0 bg-white border-r border-slate-200 whitespace-nowrap md:whitespace-normal w-40">
+                            ${team}
+                         </td>`;
+
+                // Checkboxes for each day
+                for (let i = 0; i < days; i++) {
+                    html += `<td class="px-1 py-2 text-center border border-slate-100">
+                                <input type="checkbox" class="h-5 w-5 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer matrix-check">
+                              </td>`;
+                }
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table>`;
+            matrixContainer.innerHTML = html;
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default date if empty
+            if (!startDateInput.value) {
+                startDateInput.valueAsDate = new Date();
+            }
+        });
+
+        // --- Save Progress Logic ---
+        saveBtn.addEventListener('click', () => {
+            // 1. Sync state to attributes
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (input.checked) {
+                        input.setAttribute('checked', 'checked');
+                    } else {
+                        input.removeAttribute('checked');
+                    }
+                } else if (input.tagName === 'TEXTAREA') {
+                    input.textContent = input.value;
+                } else {
+                    input.setAttribute('value', input.value);
+                }
+            });
+
+            // 2. Download
+            let htmlContent = document.documentElement.outerHTML;
+            htmlContent = '<!DOCTYPE html>\n' + htmlContent;
+
+            const name = churchNameInput.value ? churchNameInput.value.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'evangelism_meeting';
+            const dateStr = new Date().toISOString().split('T')[0];
+            const filename = `${name}_${dateStr}_meetings_outline.html`;
+
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // --- Export Logic ---
+        exportBtn.addEventListener('click', () => {
+            // Filename prefix
+            const originalTitle = document.title;
+
+            let prefix = "";
+            if (startDateInput.value) {
+                const p = startDateInput.value.split('-');
+                if (p.length === 3) prefix = `${p[0].substring(2)}${p[1]}${p[2]} `;
+            }
+
+            let cName = "Meeting Outline";
+            if (churchNameInput.value.trim()) {
+                cName = `${churchNameInput.value} Meeting Outline`;
+            }
+
+            document.title = prefix + cName;
+
+            window.print();
+
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 500);
+        });
+
+    </script>
+</body>
+
+</html>
