@@ -101,13 +101,7 @@
 
             /* Header adjustments for print */
             header {
-                position: static !important;
-                border-bottom: 2px solid #0f172a !important;
-                /* slate-900 */
-                margin-bottom: 20px !important;
-                padding-bottom: 10px !important;
-                background-color: white !important;
-                /* CRITICAL: Override dark bg */
+                display: none !important;
             }
 
             header h1 {
@@ -239,12 +233,35 @@
                 padding-right: 0.5rem !important;
                 /* px-2 */
             }
+
+            /* Branding Banner for print */
+            #branding-banner {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            #branding-banner img {
+                width: 100% !important;
+                height: auto !important;
+                display: block !important;
+                max-width: none !important;
+                max-height: none !important;
+                object-fit: contain !important;
+            }
         }
     </style>
 </head>
 
 <body
     class="bg-slate-50 text-slate-800 min-h-screen font-sans antialiased selection:bg-brand-100 selection:text-brand-900">
+
+    <!-- Branding Banner -->
+    <div id="branding-banner" class="w-full bg-[#0a0f1a] flex justify-center border-b-2 border-slate-800">
+        <img src="compassion_banner_new.jpg" alt="The Compassion Project Banner"
+            class="w-full h-auto max-w-[1400px] block shadow-2xl">
+    </div>
 
     <!-- Navbar -->
     <!-- Header -->
@@ -372,7 +389,7 @@
             <div class="flex-1 min-w-0" id="pdf-content-area">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="px-6 py-5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-                        <h3 class="text-lg font-display font-medium text-slate-900">Event Schedule</h3>
+                        <h3 class="text-lg font-display font-medium text-slate-900">Service Schedule</h3>
                         <span id="schedule-daterange" class="text-sm text-slate-500 hidden">Oct 12 - Oct 22</span>
                     </div>
                     <div class="overflow-x-auto">
@@ -595,8 +612,7 @@
             scheduleBody.innerHTML = '';
 
             for (let i = 0; i < days; i++) {
-                const currentDate = new Date(startDate);
-                currentDate.setDate(startDate.getDate() + i);
+                const currentDate = new Date(startDate.getTime() + (i * 24 * 60 * 60 * 1000) + (startDate.getTimezoneOffset() * 60 * 1000));
 
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
                 const dateString = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -910,8 +926,7 @@
             scheduleBody.innerHTML = '';
 
             for (let i = 0; i < days; i++) {
-                const currentDate = new Date(startDate);
-                currentDate.setDate(startDate.getDate() + i);
+                const currentDate = new Date(startDate.getTime() + (i * 24 * 60 * 60 * 1000) + (startDate.getTimezoneOffset() * 60 * 1000));
 
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
                 const dateString = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
